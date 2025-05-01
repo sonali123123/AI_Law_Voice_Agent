@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import whisper
-import re
 import os
 import time
 import asyncio
@@ -16,11 +15,16 @@ from langchain_core.output_parsers import StrOutputParser
 import torch
 from prompt import law_prompt_text
 import  asyncio
-
+   
+import stat
 import pyttsx3
+
+
 
 # App initialization
 app = FastAPI()
+
+
 
 # Directories for uploads and generated audio
 UPLOAD_AUDIO_DIR = Path("uploads/audio")
@@ -28,13 +32,17 @@ RESPONSE_AUDIO_DIR = Path("static/audio")
 for directory in (UPLOAD_AUDIO_DIR, RESPONSE_AUDIO_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
+
+
 # Serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load Whisper model once
 whisper_model = whisper.load_model("base",device="cuda")
+
 
 # Initialize TTS engine once
 tts_engine = pyttsx3.init()
@@ -124,8 +132,7 @@ async def ask(payload: dict = Body(...), background_tasks: BackgroundTasks = Non
     })
 
 
-   
-import pyttsx3, os, stat
+
 
 def generate_audio_from_response(response_text: str, out_path: Path) -> None:
     # 1. New engine for each file

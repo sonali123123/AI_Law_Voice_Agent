@@ -1,0 +1,21 @@
+# Web framework + ASGI extras
+fastapi[standard]>=0.95.0
+
+# Transcription model
+openai-whisper>=20230521
+
+# ORM toolkit (used if re-enabling SQLChatMessageHistory)
+SQLAlchemy>=2.0.0
+
+# LangChain core and integrations
+langchain-core>=0.0.1
+langchain-community>=0.0.1
+langchain-ollama>=0.3.2
+
+# Deep learning backend
+torch>=2.0.0
+
+# Offline text-to-speech
+pyttsx3>=2.98
+
+gtts

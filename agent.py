@@ -15,15 +15,23 @@ from langchain_core.output_parsers import StrOutputParser
 import torch
 from prompt import law_prompt_text
 import  asyncio
-   
-import stat
+
 import pyttsx3
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 # App initialization
 app = FastAPI()
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],            # or list of your frontend URLs
+    allow_credentials=True,
+    allow_methods=["*"],            # <-- this allows OPTIONS, GET, POST, etc.
+    allow_headers=["*"],
+)
 
 
 # Directories for uploads and generated audio
@@ -32,17 +40,13 @@ RESPONSE_AUDIO_DIR = Path("static/audio")
 for directory in (UPLOAD_AUDIO_DIR, RESPONSE_AUDIO_DIR):
     directory.mkdir(parents=True, exist_ok=True)
 
-
-
 # Serve static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Load Whisper model once
 whisper_model = whisper.load_model("base",device="cuda")
-
 
 # Initialize TTS engine once
 tts_engine = pyttsx3.init()
